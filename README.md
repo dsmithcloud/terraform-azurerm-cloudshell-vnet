@@ -5,7 +5,7 @@ Terraform Module to provision all the resources necessary to connect Cloud Shell
 
 ```terraform
 module "cloudshell-vnet" {
-  source                       = "https://github.com/dsmithcloud/tf-cloudshell-vnet.git"
+  source                       = "git::https://github.com/dsmithcloud/tf-cloudshell-vnet.git"
   region                       = "southcentralus"
   existing-vnet-name           = "vnet-core-ussc-10.0.0.0_24"
   existing-vnet-resource-group = "rg-global-core-network"
