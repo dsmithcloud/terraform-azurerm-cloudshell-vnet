@@ -12,7 +12,8 @@ module "cloudshell-vnet" {
   ACI-OID                      = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
   container-subnet-prefix      = ["10.0.0.96/27"]
   relay-subnet-prefix          = ["10.0.0.128/26"]
-  storageaccount-name          = "storageacctname"
+  relay-namespace-name         = "cshrelay"           #Must be globally unique
+  storageaccount-name          = "storageacctname"    #Must be globally unique
   tags                         = {
     "key_1" = "value_1"
     "key_2" = "value_2" 
