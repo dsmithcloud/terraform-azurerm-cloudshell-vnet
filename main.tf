@@ -79,7 +79,7 @@ resource "azurerm_private_endpoint" "private-endpoint" {
   location            = var.region
   subnet_id           = azurerm_subnet.relay-subnet.id
   private_service_connection {
-    name                           = "${data.azurerm_virtual_network.virtual-network.location}-privsvc"   # Max Length 80 characters
+    name                           = "${data.azurerm_virtual_network.virtual-network.location}-privsvc" # Max Length 80 characters
     private_connection_resource_id = azurerm_relay_namespace.relay-namespace.id
     is_manual_connection           = false
     subresource_names              = ["namespace"]
@@ -103,6 +103,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dns-zone-link" {
   resource_group_name   = var.existing-vnet-resource-group
   private_dns_zone_name = "privatelink.servicebus.windows.net"
   virtual_network_id    = data.azurerm_virtual_network.virtual-network.id
+  depends_on            = [azurerm_private_dns_zone.global-private-dns-zone]
 }
 
 resource "azurerm_private_dns_a_record" "ussc-dns-a-record" {
@@ -111,6 +112,7 @@ resource "azurerm_private_dns_a_record" "ussc-dns-a-record" {
   resource_group_name = var.existing-vnet-resource-group
   ttl                 = 3600
   records             = [cidrhost(var.relay-subnet-prefix[0], 4)]
+  depends_on          = [azurerm_private_dns_zone.global-private-dns-zone]
 }
 
 #================    Storage    ================
