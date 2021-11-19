@@ -79,7 +79,7 @@ resource "azurerm_private_endpoint" "private-endpoint" {
   location            = var.region
   subnet_id           = azurerm_subnet.relay-subnet.id
   private_service_connection {
-    name                           = "${var.region}-privateserviceconnection"
+    name                           = "${var.region}-privsvc"   # Max Length 80 characters
     private_connection_resource_id = azurerm_relay_namespace.relay-namespace.id
     is_manual_connection           = false
     subresource_names              = ["namespace"]
