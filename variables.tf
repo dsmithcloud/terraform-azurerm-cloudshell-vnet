@@ -61,4 +61,5 @@ variable "private-endpoint-name" {
 variable "tags" {
   type        = map(string)
   description = "the list of tags to be assigned"
+  default     = {}
 }
