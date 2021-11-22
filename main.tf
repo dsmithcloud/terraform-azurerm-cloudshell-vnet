@@ -18,6 +18,9 @@ resource "azurerm_subnet" "relay-subnet" {
   virtual_network_name                           = var.existing-vnet-name
   enforce_private_link_endpoint_network_policies = true  #true = Disable; false = Enable
   enforce_private_link_service_network_policies  = false #true = Disable; false = Enable
+  depends_on = [
+    azurerm_subnet.container-subnet
+  ]
 }
 
 #================    Network Profile    ================
@@ -26,13 +29,16 @@ resource "azurerm_network_profile" "network-profile" {
   resource_group_name = var.existing-vnet-resource-group
   location            = var.region
   container_network_interface {
-    name = "eth-cloudshell"
+    name = "eth-${azurerm_subnet.container-subnet.name}"
     ip_configuration {
-      name      = "ipconfig"
+      name      = "ipconfig-${azurerm_subnet.container-subnet.name}"
       subnet_id = azurerm_subnet.container-subnet.id
     }
   }
   tags = var.tags
+  depends_on = [
+    azurerm_subnet.container-subnet
+  ]
 }
 
 #================    Relay Namespace   ================
@@ -59,17 +65,23 @@ data "azurerm_role_definition" "networkRoleDefinitionId" {
 }
 
 resource "azurerm_role_assignment" "role-assignment-network" {
-  name                 = uuid()
+  name                 = uuid5("oid", "${var.ACI-OID}")
   scope                = azurerm_network_profile.network-profile.id
   role_definition_name = data.azurerm_role_definition.networkRoleDefinitionId.name
   principal_id         = var.ACI-OID
+  depends_on = [
+    azurerm_network_profile.network-profile
+  ]
 }
 
 resource "azurerm_role_assignment" "role-assignment-contributor" {
-  name                 = uuid()
-  scope                = azurerm_network_profile.network-profile.id
+  name                 = uuid5("oid", "${var.ACI-OID}")
+  scope                = azurerm_relay_namespace.relay-namespace.id
   role_definition_name = data.azurerm_role_definition.contributorRoleDefinitionId.name
   principal_id         = var.ACI-OID
+  depends_on = [
+    azurerm_relay_namespace.relay-namespace
+  ]
 }
 
 #================    Private Endpoints    ================
@@ -85,6 +97,10 @@ resource "azurerm_private_endpoint" "private-endpoint" {
     subresource_names              = ["namespace"]
   }
   tags = var.tags
+  depends_on = [
+    azurerm_relay_namespace.relay-namespace,
+    azurerm_subnet.relay-subnet
+  ]
 }
 
 #================    Private DNS    ================
@@ -122,6 +138,7 @@ resource "azurerm_storage_account" "storageaccount" {
   location                 = var.region
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  min_tls_version          = 1.2
 
   tags = merge(var.tags, { ms-resource-usage = "azure-cloud-shell" })
 }
