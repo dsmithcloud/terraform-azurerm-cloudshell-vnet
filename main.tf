@@ -51,30 +51,20 @@ resource "azurerm_relay_namespace" "relay-namespace" {
 }
 
 #================    Role Assignments    ================
-data "azurerm_subscription" "current" {
-}
-
-data "azurerm_role_definition" "contributorRoleDefinitionId" {
-  role_definition_id = "b24988ac-6180-42a0-ab88-20f7382dd24c"
-}
-
-data "azurerm_role_definition" "networkRoleDefinitionId" {
-  role_definition_id = "4d97b98b-1d4f-4787-a291-c67834d212e7"
-}
 
 resource "azurerm_role_assignment" "role-assignment-network" {
-  scope                = azurerm_network_profile.network-profile.id
-  role_definition_name = data.azurerm_role_definition.networkRoleDefinitionId.name
-  principal_id         = var.ACI-OID
+  scope              = azurerm_network_profile.network-profile.id
+  role_definition_id = "4d97b98b-1d4f-4787-a291-c67834d212e7"
+  principal_id       = var.ACI-OID
   depends_on = [
     azurerm_network_profile.network-profile
   ]
 }
 
 resource "azurerm_role_assignment" "role-assignment-contributor" {
-  scope                = azurerm_relay_namespace.relay-namespace.id
-  role_definition_name = data.azurerm_role_definition.contributorRoleDefinitionId.name
-  principal_id         = var.ACI-OID
+  scope              = azurerm_relay_namespace.relay-namespace.id
+  role_definition_id = "b24988ac-6180-42a0-ab88-20f7382dd24c"
+  principal_id       = var.ACI-OID
   depends_on = [
     azurerm_relay_namespace.relay-namespace
   ]
