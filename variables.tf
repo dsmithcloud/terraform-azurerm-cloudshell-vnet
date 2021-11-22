@@ -1,13 +1,3 @@
-# variable "resource-group" {
-#   type        = string
-#   description = "the name of the resource group to deploy to"
-# }
-
-variable "region" {
-  type        = string
-  description = "the region to deploy to"
-}
-
 variable "existing-vnet-name" {
   type        = string
   description = "the name of the existing virtual network"
