@@ -138,7 +138,7 @@ resource "azurerm_storage_account" "storageaccount" {
   location                 = var.region
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  min_tls_version          = 1.2
+  min_tls_version          = TLS1_2
 
   tags = merge(var.tags, { ms-resource-usage = "azure-cloud-shell" })
 }
