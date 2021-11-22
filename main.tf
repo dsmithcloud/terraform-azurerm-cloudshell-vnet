@@ -87,7 +87,7 @@ resource "azurerm_private_endpoint" "private-endpoint" {
   location            = data.azurerm_resource_group.existing-rg.location
   subnet_id           = azurerm_subnet.relay-subnet.id
   private_service_connection {
-    name                           = "${data.azurerm_virtual_network.virtual-network.location}-privsvc" # Max Length 80 characters
+    name                           = "${data.azurerm_virtual_network.existing-vnet.location}-privsvc" # Max Length 80 characters
     private_connection_resource_id = azurerm_relay_namespace.relay-namespace.id
     is_manual_connection           = false
     subresource_names              = ["namespace"]
