@@ -1,6 +1,8 @@
 # tf-cloudshell-vnet
 Terraform Module to provision all the resources necessary to connect Cloud Shell to an existing Azure VNET
 
+For the Microsoft-provided ARM template, see https://github.com/Azure/azure-quickstart-templates/blob/master/demos/cloud-shell-vnet/azuredeploy.json 
+
 ## Supported Regions
 The allowed locations are 'westus,southcentralus,eastus,northeurope,westeurope,centralindia,southeastasia,westcentralus,eastus2euap,centraluseuap'
 
