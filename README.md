@@ -25,31 +25,25 @@ module "cloudshell-vnet**: (Required) com/dsmithcloud/tf-cloudshell-vnet.git"
 
 **existing-vnet-resource-group**: (Required) The name of the resource containing the existing virtual network
 
-**relay-namespace-name**: (Optional) The name to be assigned to the relay namespace
-default     = "cshrelay"
+**relay-namespace-name**: (Optional) The name to be assigned to the relay namespace (default     = "cshrelay")
 
 **ACI-OID**: (Required) Azure Container Instance OID.  You can obtain this value by running the following command:
 ```powershell
 Get-AzADServicePrincipal -DisplayNameBeginsWith 'Azure Container Instance'
 ```
 
-**container-subnet-name**: (Optional) the name to be assigned to the cloudshell container subnet
-  default     = "cloudshellsubnet"
+**container-subnet-name**: (Optional) the name to be assigned to the cloudshell container subnet (default     = "cloudshellsubnet")
 
 **container-subnet-prefix**: (Required) the list of address prefix(es) to be assigned to the cloudshell container subnet
 
-**relay-subnet-name**: (Optional) the name to be assigned to the relay subnet
-  default     = "relaysubnet"
+**relay-subnet-name**: (Optional) the name to be assigned to the relay subnet (default     = "relaysubnet")
 
 **relay-subnet-prefix**: (Required) the list of address prefix(es) to be assigned to the relay subnet
 
-**storage-subnet-name**: (Optional) the name to be assigned to the storage subnet
-  default     = "storagesubnet"
+**storage-subnet-name**: (Optional) the name to be assigned to the storage subnet (default     = "storagesubnet")
 
 **storageaccount-name**: (Required) the name of the storage account to create
 
-**private-endpoint-name**: (Optional) the name to be assigned to the private endpoint
-  default     = "cloudshellRelayEndpoint"
+**private-endpoint-name**: (Optional) the name to be assigned to the private endpoint (default     = "cloudshellRelayEndpoint")
 
-**tags**: (Optional) the list of tags to be assigned
-  default     = {}
+**tags**: (Optional) the list of tags to be assigned (default     = {})
