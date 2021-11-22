@@ -138,13 +138,11 @@ resource "azurerm_storage_account" "storageaccount" {
   location                 = var.region
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  min_tls_version          = TLS1_2
+  min_tls_version          = "TLS1_2"
+  network_rules {
+    default_action             = "Deny"
+    virtual_network_subnet_ids = [azurerm_subnet.container-subnet.id]
+  }
 
   tags = merge(var.tags, { ms-resource-usage = "azure-cloud-shell" })
-}
-
-resource "azurerm_storage_account_network_rules" "cshellstor-fwrules" {
-  storage_account_id         = azurerm_storage_account.storageaccount.id
-  default_action             = "Deny"
-  virtual_network_subnet_ids = [azurerm_subnet.container-subnet.id]
 }
