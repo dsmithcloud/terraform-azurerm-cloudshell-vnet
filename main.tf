@@ -65,7 +65,7 @@ data "azurerm_role_definition" "networkRoleDefinitionId" {
 }
 
 resource "azurerm_role_assignment" "role-assignment-network" {
-  name                 = uuid5("oid", "${var.ACI-OID}")
+  name                 = uuidv5("oid", "${var.ACI-OID}")
   scope                = azurerm_network_profile.network-profile.id
   role_definition_name = data.azurerm_role_definition.networkRoleDefinitionId.name
   principal_id         = var.ACI-OID
@@ -75,7 +75,7 @@ resource "azurerm_role_assignment" "role-assignment-network" {
 }
 
 resource "azurerm_role_assignment" "role-assignment-contributor" {
-  name                 = uuid5("oid", "${var.ACI-OID}")
+  name                 = uuidv5("oid", "${var.ACI-OID}")
   scope                = azurerm_relay_namespace.relay-namespace.id
   role_definition_name = data.azurerm_role_definition.contributorRoleDefinitionId.name
   principal_id         = var.ACI-OID
