@@ -61,10 +61,17 @@ resource "azurerm_relay_namespace" "relay-namespace" {
 }
 
 #================    Role Assignments    ================
+data "azurerm_role_definition" "networkRoleDefinition" {
+  role_definition_id = "4d97b98b-1d4f-4787-a291-c67834d212e7"
+}
+
+data "azurerm_role_definition" "contributorRoleDefinition" {
+  role_definition_id = "b24988ac-6180-42a0-ab88-20f7382dd24c"
+}
 
 resource "azurerm_role_assignment" "role-assignment-network" {
   scope              = azurerm_network_profile.network-profile.id
-  role_definition_id = "4d97b98b-1d4f-4787-a291-c67834d212e7"
+  role_definition_id = data.azurerm_role_definition.networkRoleDefinition.id
   principal_id       = var.ACI-OID
   depends_on = [
     azurerm_network_profile.network-profile
@@ -73,7 +80,7 @@ resource "azurerm_role_assignment" "role-assignment-network" {
 
 resource "azurerm_role_assignment" "role-assignment-contributor" {
   scope              = azurerm_relay_namespace.relay-namespace.id
-  role_definition_id = "b24988ac-6180-42a0-ab88-20f7382dd24c"
+  role_definition_id = data.azurerm_role_definition.contributorRoleDefinition.id
   principal_id       = var.ACI-OID
   depends_on = [
     azurerm_relay_namespace.relay-namespace
