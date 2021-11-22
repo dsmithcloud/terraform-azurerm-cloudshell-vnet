@@ -26,7 +26,7 @@ module "cloudshell-vnet**: (Required) com/dsmithcloud/tf-cloudshell-vnet.git"
 **existing-vnet-resource-group**: (Required) The name of the resource containing the existing virtual network
 
 **relay-namespace-name**: (Optional) The name to be assigned to the relay namespace
-  default     = "cshrelay"
+default     = "cshrelay"
 
 **ACI-OID**: (Required) Azure Container Instance OID.  You can obtain this value by running the following command:
 ```powershell
