@@ -1,6 +1,11 @@
-#================    Existing Resource Group    ================
+#================    Existing Resources    ================
 data "azurerm_resource_group" "existing-rg" {
   name = var.existing-vnet-resource-group
+}
+
+data "azurerm_virtual_network" "existing-vnet" {
+  name                = var.existing-vnet-name
+  resource_group_name = data.azurerm_resource_group.existing-rg.name
 }
 
 #================    Subnets    ================
@@ -8,7 +13,7 @@ resource "azurerm_subnet" "container-subnet" {
   name                 = var.container-subnet-name
   address_prefixes     = var.container-subnet-prefix
   resource_group_name  = data.azurerm_resource_group.existing-rg.name
-  virtual_network_name = var.existing-vnet-name
+  virtual_network_name = data.azurerm_virtual_network.existing-vnet.name
   service_endpoints    = ["Microsoft.Storage"]
   delegation {
     name = "delegation"
@@ -20,7 +25,7 @@ resource "azurerm_subnet" "relay-subnet" {
   name                                           = var.relay-subnet-name
   address_prefixes                               = var.relay-subnet-prefix
   resource_group_name                            = data.azurerm_resource_group.existing-rg.name
-  virtual_network_name                           = var.existing-vnet-name
+  virtual_network_name                           = data.azurerm_virtual_network.existing-vnet.name
   enforce_private_link_endpoint_network_policies = true  #true = Disable; false = Enable
   enforce_private_link_service_network_policies  = false #true = Disable; false = Enable
   depends_on = [
@@ -95,10 +100,6 @@ resource "azurerm_private_endpoint" "private-endpoint" {
 }
 
 #================    Private DNS    ================
-data "azurerm_virtual_network" "virtual-network" {
-  resource_group_name = data.azurerm_resource_group.existing-rg.name
-  name                = var.existing-vnet-name
-}
 resource "azurerm_private_dns_zone" "global-private-dns-zone" {
   name                = "privatelink.servicebus.windows.net"
   resource_group_name = data.azurerm_resource_group.existing-rg.name
@@ -109,7 +110,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dns-zone-link" {
   name                  = azurerm_relay_namespace.relay-namespace.name
   resource_group_name   = data.azurerm_resource_group.existing-rg.name
   private_dns_zone_name = "privatelink.servicebus.windows.net"
-  virtual_network_id    = data.azurerm_virtual_network.virtual-network.id
+  virtual_network_id    = data.azurerm_virtual_network.existing-vnet.id
   depends_on            = [azurerm_private_dns_zone.global-private-dns-zone]
 }
 
