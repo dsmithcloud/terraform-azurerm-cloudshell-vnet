@@ -48,6 +48,37 @@ module "cloudshell-vnet"
 }
 ```
 
+## Network Security Groups (NSG)
+
+Some organizations require/enforce NSGs on each and every subnet as part of best practices.  To support this, there are two outputs from this module:
++ container-subnet-id
++ relay-subnet-id
+
+If you want to attach NSGs to the container and relay subnets created by this module, simply add the following code to your terraform repo and reference these outputs like below:
+
+```terraform
+resource "azurerm_network_security_group" "nsg-cloudshell" {
+  name                = "container-subnet-nsg"
+  resource_group_name = azurerm_resource_group.rg-network.name
+  location            = azurerm_resource_group.rg-network.location
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg-cloudshell" {
+  subnet_id                 = module.cloudshell-vnet.container-subnet-id
+  network_security_group_id = azurerm_network_security_group.nsg-cloudshell.id
+}
+
+resource "azurerm_network_security_group" "nsg-relay" {
+  name                = "relay-subnet-nsg"
+  resource_group_name = azurerm_resource_group.rg-network.name
+  location            = azurerm_resource_group.rg-network.location
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg-relay" {
+  subnet_id                 = module.cloudshell-vnet.relay-subnet-id
+  network_security_group_id = azurerm_network_security_group.nsg-relay.id
+```
+
 ## Parameters
 
 **source**: (Required): Location where the module is stored.  Use the github.com URL in the example above, or if you want to download a copy of the module separately, use the local path where the module is included with the rest of your terraform files.
