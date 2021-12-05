@@ -79,20 +79,20 @@ data "azurerm_role_definition" "contributorRoleDefinition" {
 }
 
 resource "azurerm_role_assignment" "role-assignment-network" {
-  name               = random_uuid.network.result
-  scope              = azurerm_network_profile.network-profile.id
-  role_definition_id = data.azurerm_role_definition.networkRoleDefinition.id
-  principal_id       = var.ACI-OID
+  name                 = random_uuid.network.result
+  scope                = azurerm_network_profile.network-profile.id
+  role_definition_name = data.azurerm_role_definition.networkRoleDefinition.name
+  principal_id         = var.ACI-OID
   depends_on = [
     azurerm_network_profile.network-profile
   ]
 }
 
 resource "azurerm_role_assignment" "role-assignment-contributor" {
-  name               = random_uuid.contributor.result
-  scope              = azurerm_relay_namespace.relay-namespace.id
-  role_definition_id = data.azurerm_role_definition.contributorRoleDefinition.id
-  principal_id       = var.ACI-OID
+  name                 = random_uuid.contributor.result
+  scope                = azurerm_relay_namespace.relay-namespace.id
+  role_definition_name = data.azurerm_role_definition.contributorRoleDefinition.name
+  principal_id         = var.ACI-OID
   depends_on = [
     azurerm_relay_namespace.relay-namespace
   ]
