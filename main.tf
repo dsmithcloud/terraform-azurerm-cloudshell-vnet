@@ -17,7 +17,10 @@ resource "azurerm_subnet" "container-subnet" {
   service_endpoints    = ["Microsoft.Storage"]
   delegation {
     name = "delegation"
-    service_delegation { name = "Microsoft.ContainerInstance/containerGroups" }
+    service_delegation {
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+      name    = "Microsoft.ContainerInstance/containerGroups"
+    }
   }
 }
 
