@@ -49,6 +49,7 @@ resource "azurerm_network_profile" "network-profile" {
     }
   }
   tags = var.tags
+  lifecycle { ignore_changes = [tags] }
   depends_on = [
     azurerm_subnet.container-subnet
   ]
@@ -61,6 +62,7 @@ resource "azurerm_relay_namespace" "relay-namespace" {
   location            = data.azurerm_resource_group.existing-rg.location
   sku_name            = "Standard"
   tags                = var.tags
+  lifecycle { ignore_changes = [tags] }
 }
 
 #================    Role Assignments    ================
@@ -109,6 +111,7 @@ resource "azurerm_private_endpoint" "private-endpoint" {
     subresource_names              = ["namespace"]
   }
   tags = var.tags
+  lifecycle { ignore_changes = [tags] }
   depends_on = [
     azurerm_relay_namespace.relay-namespace,
     azurerm_subnet.relay-subnet
@@ -120,6 +123,7 @@ resource "azurerm_private_dns_zone" "global-private-dns-zone" {
   name                = "privatelink.servicebus.windows.net"
   resource_group_name = data.azurerm_resource_group.existing-rg.name
   tags                = var.tags
+  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "dns-zone-link" {
@@ -153,4 +157,5 @@ resource "azurerm_storage_account" "storageaccount" {
   }
 
   tags = merge(var.tags, { ms-resource-usage = "azure-cloud-shell" })
+  lifecycle { ignore_changes = [tags] }
 }
